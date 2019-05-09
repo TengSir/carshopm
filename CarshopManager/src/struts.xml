@@ -14,8 +14,8 @@ name就是参数名（参数名要从struts核心包里面的default.properties�
 <!--  action ,interceptor -->
 <package name="user" namespace="/user" extends="struts-default">
 	<action name="UserAction" class="com.oracle.carshopm.control.UserAction">
-		<result name="success">/index.jsp</result>
-		<result name="fail">/login.jsp</result>
+		<result name="success" type="redirect">/index.jsp</result>
+		<result name="fail"  type="redirect">/login.jsp</result>
 		<!-- 专门针对当请求到这个action时如果后台有验证方法，验证失败，会自动跳转这个result对应到网页 -->
 		<result name="input">/login.jsp</result>
 	</action>

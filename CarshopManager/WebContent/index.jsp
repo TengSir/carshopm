@@ -5,17 +5,23 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<base href="${pageContext.request.scheme }://${pageContext.request.serverName}:${pageContext.request.serverPort}/CarshopManager/">
+<base
+	href="${pageContext.request.scheme }://${pageContext.request.serverName}:${pageContext.request.serverPort}/CarshopManager/">
 <title>二手车市场管理后台-主页</title>
-<%@include file="linkResource.txt"%>
+<%@include file="resource.txt"%>
 </head>
 <body class="easyui-layout" style="padding: 10px">
 	<div class="easyui-layout" style="width: 100%; height: 100%;">
 		<div data-options="region:'north'"
 			style="height: 80px; padding-left: 20px;">
-
-			<h1 style="text-shadow: 0px 0px 5px lightskyblue">二手车市场管理后台</h1>
-
+			<img src="images/browser_logo.png"
+				style="width: 60px; height: 60px; float: left; margin: 10px;" />
+			<h1
+				style="text-shadow: 0px 0px 5px lightskyblue; display: inline-block;">二手车市场管理后台</h1>
+			<a
+				style="float: right; display: inline-block; margin-top: 20px; margin-right: 20px"
+				href="user/UserAction!logoff.action">安全退出</a> <span
+				style="float: right; display: inline-block; margin-top: 20px; margin-right: 20px">欢迎您：${sessionScope.username}</span>
 
 		</div>
 		<div data-options="region:'south',split:true" style="height: 50px;">
@@ -26,7 +32,7 @@
 		<div data-options="region:'west',split:true" title="系统菜单"
 			style="width: 160px;">
 			<ul class="easyui-tree" id="sysmenu">
-				<li  data-options="state:'closed'"><span>用户管理</span>
+				<li data-options="state:'closed'"><span>用户管理</span>
 					<ul>
 						<li><span>用户列表</span></li>
 						<li><span>用户添加</span></li>
@@ -34,7 +40,7 @@
 					</ul></li>
 			</ul>
 			<ul class="easyui-tree" id="sysmenu">
-				<li  data-options="state:'closed'"><span>汽车管理</span>
+				<li data-options="state:'closed'"><span>汽车管理</span>
 					<ul>
 						<li><span>汽车列表</span></li>
 						<li><span>汽车添加</span></li>
@@ -42,18 +48,28 @@
 					</ul></li>
 			</ul>
 		</div>
-		<div data-options="region:'center',">这是网站首页打开中间区域</div>
+		<div data-options="region:'center',">
+			<div id="tt" class="easyui-tabs" data-options="tools:'#tab-tools'"
+				style="width: 100%; height: 100%"></div>
+
+		</div>
 	</div>
 
 	<script type="text/javascript">
 		$('#sysmenu').tree({
 			onClick : function(node) {
-				if (node.text == '用户添加') {
-
-				} else {
-
+				
+				if ($('#tt').tabs('exists', node.text)){
+					$('#tt').tabs('select', node.text);
+					
+				}else{
+					$('#tt').tabs('add',{
+						title: node.text,
+						href:'userlist.jsp',
+// 						content: '<div style="padding:10px">Content这是用户列表的tab</div>',
+						closable: true
+					});
 				}
-				alert(node.text); // alert node text property when clicked
 			}
 		});
 	</script>

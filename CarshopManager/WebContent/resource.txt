@@ -4,3 +4,4 @@
 <link rel="stylesheet" type="text/css" href="css/demo.css">
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+<link rel="shortcut icon"type="image/x-icon"  href="images/browser_logo.gif" />
