@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <base
-	href="${pageContext.request.scheme }://${pageContext.request.serverName}:${pageContext.request.serverPort}/CarshopManager/">
+	href="${pageContext.request.scheme }://${pageContext.request.serverName}:${pageContext.request.serverPort}/">
 <title>二手车市场管理后台-登陆</title>
 <%@include file="resource.txt"%>
 </head>
@@ -21,12 +21,12 @@
 				style="width: 400px; padding: 50px 60px; margin: auto; box-shadow: 0px 0px 5px black">
 				<form method="post" action="user/UserAction!login.action">
 					<div style="margin-bottom: 20px">
-						<input name="user.username" class="easyui-textbox" prompt="管理账号"
+						<input name="user.username" class="easyui-textbox" prompt="管理账号" value="tengsir"
 							iconWidth="28" style="width: 100%; height: 30px; padding: 10px;">
 						<b style="color: red;"><s:fielderror fieldName="usernameError"></s:fielderror></b>
 					</div>
 					<div style="margin-bottom: 20px">
-						<input name="user.password" class="easyui-passwordbox"
+						<input name="user.password" class="easyui-passwordbox" value="123"
 							prompt="账号密码" iconWidth="28"
 							style="width: 100%; height: 30px; padding: 10px"> <b
 							style="color: red;"><s:fielderror fieldName="passwordError"></s:fielderror></b>
@@ -34,7 +34,7 @@
 					<div style="margin-bottom: 20px">
 						<input name="kaptchafield" class="easyui-textbox" prompt="验证码"
 							iconWidth="28" style="width: 50%; height: 30px; padding: 10px;">
-							<img src="Kaptcha.jpg" style="width: 50%; height: 30px;float:left;"/>
+							<img id="code" src="Kaptcha.jpg" style="width: 50%; height: 30px;float:left;"/>
 					</div>
 					<div style="text-align: center;">
 						<a href="javascript:window.document.forms[0].submit()"
@@ -58,6 +58,9 @@
 			$(window).resize(function() {
 				changeLocation();
 			});
+			$("#code").click(function(){
+				$(this).attr("src","Kaptcha.jpg?time="+Math.random())
+			})
 		})
 	</script>
 </body>

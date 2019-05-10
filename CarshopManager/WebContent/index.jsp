@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <base
-	href="${pageContext.request.scheme }://${pageContext.request.serverName}:${pageContext.request.serverPort}/CarshopManager/">
+	href="${pageContext.request.scheme }://${pageContext.request.serverName}:${pageContext.request.serverPort}/">
 <title>二手车市场管理后台-主页</title>
 <%@include file="resource.txt"%>
 </head>

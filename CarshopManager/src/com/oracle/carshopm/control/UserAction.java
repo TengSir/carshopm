@@ -10,6 +10,7 @@ import com.oracle.carshopm.model.User;
  * 
  * @author TengSir
  */
+
 public class UserAction extends ActionSupport{
 	private String kaptchafield;
 
@@ -59,8 +60,6 @@ public class UserAction extends ActionSupport{
 		
 		//ServletActionContext.getRequest()
 		String sysCode = ServletActionContext.getRequest().getSession().getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY).toString();
-		System.out.println(kaptchafield + "\t\t" + sysCode);
-		System.out.println("进入到登陆方法了");
 		if (user.getPassword().equals("123")) {
 			System.out.println("login success");
 			 ServletActionContext.getRequest().getSession().setAttribute("username", user.getUsername());
