@@ -1,10 +1,14 @@
 package com.oracle.carshopm.control;
 
+import java.util.List;
+
 import org.apache.struts2.ServletActionContext;
 
-import com.opensymphony.xwork2.ActionContext;
+import com.alibaba.fastjson.JSONArray;
 import com.opensymphony.xwork2.ActionSupport;
-import com.oracle.carshopm.model.User;
+import com.oracle.carshopm.model.bean.User;
+import com.oracle.carshopm.model.dao.UserDAO;
+import com.oracle.carshopm.model.dao.UserDAOImp;
 /**
  * 等同于servlet里面的UserServlet
  * 
@@ -13,6 +17,39 @@ import com.oracle.carshopm.model.User;
 
 public class UserAction extends ActionSupport{
 	private String kaptchafield;
+	private int page;
+	private int rows;
+	
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+
+	private JSONArray  array;
+	public JSONArray getArray() {
+		return array;
+	}
+
+	public void setArray(JSONArray array) {
+		this.array = array;
+	}
+
+	private UserDAO dao;
+	public UserAction() {
+		dao=new UserDAOImp();
+	}
 
 	public String getKaptchafield() {
 		return kaptchafield;
@@ -37,9 +74,17 @@ public class UserAction extends ActionSupport{
 		return null;
 	}
 
-	public String forgetPassword() {
-		System.out.println("forgetPassword");
-		return null;
+	/**
+	 * 使用分页的方式查询用户列表，返回json格式
+	 * @return
+	 */
+	public String listUsers() {
+		System.out.println(page+"\t"+rows);
+		List us=dao.listUsers(page,rows);
+		JSONArray.toJSONString(us);
+		array=new JSONArray(us);//值栈
+		System.out.println(us.size());
+		return SUCCESS;
 	}
 
 	public String logoff() {

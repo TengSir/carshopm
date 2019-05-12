@@ -3,6 +3,9 @@
 	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.i18n.reload" value="false" />
+	<constant name="struts.configuration.xml.reload" value="true" />
 	<!--可以使用include将其他的struts的配置文件导入合并到这个总的配置文件里 -->
 	<!-- <include file="admin.xml"></include> -->
 
@@ -22,6 +25,19 @@
 			<result name="fail" type="redirect">/login.jsp</result>
 			<!-- 专门针对当请求到这个action时如果后台有验证方法，验证失败，会自动跳转这个result对应到网页 -->
 			<result name="input">/login.jsp</result>
+		</action>
+	</package>
+	<!-- action ,interceptor -->
+	<package name="user1" namespace="/user1" extends="json-default">
+		<action name="UserAction"
+			class="com.oracle.carshopm.control.UserAction">
+			<result name="success" type="redirect">/index.jsp</result>
+			<result name="fail" type="redirect">/login.jsp</result>
+			<!-- 专门针对当请求到这个action时如果后台有验证方法，验证失败，会自动跳转这个result对应到网页 -->
+			<result name="input">/login.jsp</result>
+			<result type="json">
+				<param name="root">array</param>
+			</result>
 		</action>
 	</package>
 </struts>

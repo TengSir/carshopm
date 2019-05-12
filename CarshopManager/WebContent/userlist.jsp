@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <table class="easyui-datagrid" style="width: 100%; height: 100%"
-	data-options="rownumbers:true,singleSelect:true,url:'user/UserAction!listUsers.action',method:'get',toolbar:'#tb'">
+	data-options="pagination:true,rownumbers:true,singleSelect:true,url:'user1/UserAction!listUsers.action?page=1&rows=3',method:'get',toolbar:'#tb'">
 	<thead>
 		<tr>
-			<th data-options="field:'itemid',width:80">用户头像</th>
-			<th data-options="field:'productid',width:100">用户昵称</th>
-			<th data-options="field:'listprice',width:80,align:'right'">用户名</th>
-			<th data-options="field:'unitcost',width:80,align:'right'">用户性别</th>
-			<th data-options="field:'attr1',width:240">用户年龄</th>
-			<th data-options="field:'status',width:60,align:'center'">用户电话</th>
+			<th data-options="field:'image'">用户头像</th>
+			<th data-options="field:'nickname'">用户昵称</th>
+			<th data-options="field:'username',align:'right'">用户名</th>
+			<th data-options="field:'sex',align:'right'">用户性别</th>
+			<th data-options="field:'age'">用户年龄</th>
+			<th data-options="field:'tel',align:'center'">用户电话</th>
 		</tr>
 	</thead>
 </table>
