@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <table class="easyui-datagrid" style="width: 100%; height: 100%"
-	data-options="pagination:true,rownumbers:true,singleSelect:true,url:'user1/UserAction!listUsers.action?page=1&rows=3',method:'get',toolbar:'#tb'">
+	data-options="pagination:true,rownumbers:true,singleSelect:true,url:'user1/UserAction!listUsers.action',method:'get',toolbar:'#tb'">
 	<thead>
 		<tr>
 			<th data-options="field:'image'">用户头像</th>
@@ -36,3 +36,6 @@
 			<a href="#" class="easyui-linkbutton" iconCls="icon-search">Search</a>
 		</div> -->
 </div>
+<script>
+// user1/UserAction!getAllCountOfUsers.action
+</script>

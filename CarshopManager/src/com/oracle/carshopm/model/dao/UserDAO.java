@@ -8,6 +8,7 @@ public interface UserDAO extends BaseDAO {
 	public User  login(String username,String password);
 	public  User getUserInfoByUserId(int userid);
 	public boolean checkUserExsit(String username);
+	public int getAllCount();
 	
 	public ArrayList<User>  listUsers(int page,int count);
 }

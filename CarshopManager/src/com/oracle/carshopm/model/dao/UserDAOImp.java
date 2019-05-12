@@ -165,7 +165,7 @@ public class UserDAOImp extends BaseDAOImp implements UserDAO {
 				user.setUsername(rs.getString("username"));
 				user.setPassword(rs.getString("password"));
 				user.setAge(rs.getInt("age"));
-				user.setImage(rs.getString("image"));
+				user.setImage("<img src='"+rs.getString("image")+"' style='width:30px;height:30px'/>");
 				user.setNickname(rs.getString("nickname"));
 				user.setSex(rs.getInt("sex"));
 				user.setJob(rs.getString("job"));
@@ -197,5 +197,20 @@ public class UserDAOImp extends BaseDAOImp implements UserDAO {
 	public Object list() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int getAllCount() {
+		int count=0;
+		Statement sta = null;
+		try {
+			sta = getSta();
+			ResultSet rs = sta.executeQuery("select  count(userid)  from  user ");
+			rs.next();
+			count=rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
 	}
 }
