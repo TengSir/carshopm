@@ -9,7 +9,7 @@
 	<!--可以使用include将其他的struts的配置文件导入合并到这个总的配置文件里 -->
 	<!-- <include file="admin.xml"></include> -->
 
-
+	
 	<!-- constant标签的作用是用来让用户可以自定义过修改struts的一些系统配置参数 name就是参数名（参数名要从struts核心包里面的default.properties里面找） -->
 
 	<!-- 开启了动态方法调用 -->
@@ -29,6 +29,14 @@
 	</package>
 	<!-- action ,interceptor -->
 	<package name="user1" namespace="/user1" extends="json-default">
+	<!-- 声明拦截器组件，相当于告诉struts2，我们开发了这样的一些拦截器组件 -->
+	
+		<interceptors>
+			<interceptor name="admininter" class="com.oracle.carshopm.control.interceptor.AdminCheck"></interceptor>
+		</interceptors>
+			<global-results>
+			<result name="checkFail" type="redirect">/login.jsp</result>
+		</global-results>
 		<action name="UserAction"
 			class="com.oracle.carshopm.control.UserAction">
 			<result name="success" type="redirect">/index.jsp</result>
@@ -38,6 +46,11 @@
 			<result type="json">
 				<param name="root">array</param>
 			</result>
+			<!-- 配置让哪一个拦截器负责拦截这个action的方法 -->
+<!-- 			<interceptor-ref name="admininter"> -->
+<!-- 				<param name="includeMethod">listUsers,getAllCountOfUsers</param> -->
+<!-- 				<param name="excludeMethod">login,logoff</param> -->
+<!-- 			</interceptor-ref> -->
 		</action>
 	</package>
 </struts>

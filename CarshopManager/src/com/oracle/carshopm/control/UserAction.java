@@ -22,8 +22,8 @@ import com.oracle.carshopm.model.dao.UserDAOImp;
 
 public class UserAction extends ActionSupport {
 	private String kaptchafield;
-	private int page;//1
-	private int rows;//10
+	private int page;// 1
+	private int rows;// 10
 
 	public int getPage() {
 		return page;
@@ -42,7 +42,6 @@ public class UserAction extends ActionSupport {
 	}
 
 	private JSONObject array;
-
 
 	public JSONObject getArray() {
 		return array;
@@ -86,18 +85,26 @@ public class UserAction extends ActionSupport {
 	 * 
 	 * @return
 	 */
+
 	public String listUsers() {
-		System.out.println(page + "\t" + rows);
+		System.out.println(page+"\t\t"+rows);
 		List us = dao.listUsers(page, rows);
-
-		HashMap<String, Object> datas=new HashMap<>();
+		System.out.println(us.size());
+		HashMap<String, Object> datas = new HashMap<>();
 		datas.put("total", dao.getAllCount());
-		datas.put("rows",us);
+		datas.put("rows", us);
 
-		array =new JSONObject(datas);
+		array = new JSONObject(datas);
 		return SUCCESS;
 	}
-	
+	public String deleteUserById() {
+		boolean result=dao.deletUserById(user.getUserid());
+		System.out.println(result);
+		array = new JSONObject();
+		array.put("result", result);
+		return SUCCESS;
+	}
+
 	public String getAllCountOfUsers() {
 //		JSONObject  count=new JSONObject();
 //		count.put("total", dao.getAllCount());

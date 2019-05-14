@@ -1,9 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="s" uri="/struts-tags"%>
+<%@taglib prefix="sx" uri="/struts-dojo-tags"%>
 
 <!DOCTYPE html>
 <html>
 <head>
+<sx:head />
+<!-- struts2 css -->
 <meta charset="UTF-8">
 <base
 	href="${pageContext.request.scheme }://${pageContext.request.serverName}:${pageContext.request.serverPort}/">
@@ -21,7 +25,8 @@
 			<a
 				style="float: right; display: inline-block; margin-top: 20px; margin-right: 20px"
 				href="user/UserAction!logoff.action">安全退出</a> <span
-				style="float: right; display: inline-block; margin-top: 20px; margin-right: 20px">欢迎您：${sessionScope.username}</span>
+				style="float: right; display: inline-block; margin-top: 20px; margin-right: 20px">欢迎您：<s:property
+					value="#session.username" /></span>
 
 		</div>
 		<div data-options="region:'south',split:true" style="height: 50px;">
@@ -58,16 +63,16 @@
 	<script type="text/javascript">
 		$('#sysmenu').tree({
 			onClick : function(node) {
-				
-				if ($('#tt').tabs('exists', node.text)){
+
+				if ($('#tt').tabs('exists', node.text)) {
 					$('#tt').tabs('select', node.text);
-					
-				}else{
-					$('#tt').tabs('add',{
-						title: node.text,
-						href:'userlist.jsp',
-// 						content: '<div style="padding:10px">Content这是用户列表的tab</div>',
-						closable: true
+
+				} else {
+					$('#tt').tabs('add', {
+						title : node.text,
+						href : 'userlist.jsp',
+						// 						content: '<div style="padding:10px">Content这是用户列表的tab</div>',
+						closable : true
 					});
 				}
 			}

@@ -213,4 +213,18 @@ public class UserDAOImp extends BaseDAOImp implements UserDAO {
 		}
 		return count;
 	}
+
+	@Override
+	public boolean deletUserById(int userid) {
+		boolean result = false;
+		Statement sta = null;
+		try {
+			sta = getSta();
+			int count = sta.executeUpdate("delete from user where userid="+userid);
+			result = (count > 0) ? true : false;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
