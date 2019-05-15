@@ -1,5 +1,8 @@
 package com.oracle.carshopm.control;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +24,34 @@ import com.oracle.carshopm.model.dao.UserDAOImp;
  */
 
 public class UserAction extends ActionSupport {
+	private File  image;
+	private String imageContentType;
+	private String imageFilename;
+	
+	public File getImage() {
+		return image;
+	}
+
+	public void setImage(File image) {
+		this.image = image;
+	}
+
+	public String getImageContentType() {
+		return imageContentType;
+	}
+
+	public void setImageContentType(String imageContentType) {
+		this.imageContentType = imageContentType;
+	}
+
+	public String getImageFilename() {
+		return imageFilename;
+	}
+
+	public void setImageFilename(String imageFilename) {
+		this.imageFilename = imageFilename;
+	}
+
 	private String kaptchafield;
 	private int page;// 1
 	private int rows;// 10
@@ -75,8 +106,21 @@ public class UserAction extends ActionSupport {
 		this.user = user;
 	}
 
-	public String register() {
-		System.out.println("registermethod");
+	public String upload() {
+		System.out.println("upload method");
+		try {
+			System.out.println(imageContentType);
+			System.out.println(imageFilename);
+			FileInputStream in = new FileInputStream(image);
+			byte[] bs = new byte[1024];
+			int leng = -1;
+			while ((leng = in.read(bs)) != -1) {
+				System.out.println(Arrays.toString(bs));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("upload");
 		return null;
 	}
 
@@ -87,29 +131,17 @@ public class UserAction extends ActionSupport {
 	 */
 
 	public String listUsers() {
-		System.out.println(page+"\t\t"+rows);
-		List us = dao.listUsers(page, rows);
-		System.out.println(us.size());
 		HashMap<String, Object> datas = new HashMap<>();
 		datas.put("total", dao.getAllCount());
-		datas.put("rows", us);
-
+		datas.put("rows", dao.listUsers(page, rows));
 		array = new JSONObject(datas);
 		return SUCCESS;
 	}
+
 	public String deleteUserById() {
-		boolean result=dao.deletUserById(user.getUserid());
-		System.out.println(result);
+		boolean result = dao.deletUserById(user.getUserid());
 		array = new JSONObject();
 		array.put("result", result);
-		return SUCCESS;
-	}
-
-	public String getAllCountOfUsers() {
-//		JSONObject  count=new JSONObject();
-//		count.put("total", dao.getAllCount());
-//		array =new JSONArray();
-//		array.add(count);
 		return SUCCESS;
 	}
 

@@ -3,6 +3,8 @@
 	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
+	<!-- 配置国际化资源文件的basename -->
+	<constant name="struts.custom.i18n.resources" value="basename" />
 	<constant name="struts.devMode" value="false" />
 	<constant name="struts.i18n.reload" value="false" />
 	<constant name="struts.configuration.xml.reload" value="true" />

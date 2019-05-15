@@ -6,13 +6,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <sx:head />
 <!-- struts2 css -->
 <meta charset="UTF-8">
 <base
 	href="${pageContext.request.scheme }://${pageContext.request.serverName}:${pageContext.request.serverPort}/">
-<title>二手车市场管理后台-主页</title>
+<title><s:i18n name="basename"><s:text name="index.title"></s:text></s:i18n></title>
 <%@include file="resource.txt"%>
+
 </head>
 <body class="easyui-layout" style="padding: 10px">
 	<div class="easyui-layout" style="width: 100%; height: 100%;">
@@ -37,7 +39,7 @@
 		<div data-options="region:'west',split:true" title="系统菜单"
 			style="width: 160px;">
 			<ul class="easyui-tree" id="sysmenu">
-				<li data-options="state:'closed'"><span>用户管理</span>
+				<li data-options="state:'open'"><span>用户管理</span>
 					<ul>
 						<li><span>用户列表</span></li>
 						<li><span>用户添加</span></li>
@@ -63,17 +65,17 @@
 	<script type="text/javascript">
 		$('#sysmenu').tree({
 			onClick : function(node) {
-
 				if ($('#tt').tabs('exists', node.text)) {
 					$('#tt').tabs('select', node.text);
-
 				} else {
-					$('#tt').tabs('add', {
-						title : node.text,
-						href : 'userlist.jsp',
-						// 						content: '<div style="padding:10px">Content这是用户列表的tab</div>',
-						closable : true
-					});
+					if(node.text=='用户列表'){
+						$('#tt').tabs('add', {
+							title : node.text,
+							href : 'userlist.jsp',
+							// 						content: '<div style="padding:10px">Content这是用户列表的tab</div>',
+							closable : true
+						});
+					}
 				}
 			}
 		});

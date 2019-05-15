@@ -155,7 +155,7 @@ public class UserDAOImp extends BaseDAOImp implements UserDAO {
 		PreparedStatement sta = null;
 		ResultSet rs = null;
 		try {
-			sta = getPreSta("select *  from user limit ?,?");
+			sta = getPreSta("select *  from user order by userid desc limit ?,?");
 			sta.setInt(1, (page-1)*count);
 			sta.setInt(2, count);
 			rs = sta.executeQuery();

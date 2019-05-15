@@ -23,78 +23,69 @@
 				<th data-options="field:'sex',align:'right'">用户性别</th>
 				<th data-options="field:'age'">用户年龄</th>
 				<th data-options="field:'tel',align:'center'">用户电话</th>
+				<th data-options="field:'job',align:'center'">职业</th>
+				<th data-options="field:'email',align:'center'">用户邮箱</th>
+				
 			</tr>
 		</thead>
 	</table>
-	<div id="dlg" class="easyui-dialog" title="消息提示" 
-		style="width: 260px; height: 160px; padding: 10px"
-		data-options="
-				iconCls: 'icon-delete',
-				toolbar: '#dlg-toolbar',
-				buttons: '#dlg-buttons',
-				resizable:false,
-				modal:true,
-				closed:true
-			">
-		必须选中一条才能删除！</div>
-	<div id="dlg-toolbar" style="padding: 2px 0"></div>
-	<div id="dlg-buttons">
-		 <a
-			href="javascript:void(0)" class="easyui-linkbutton"
-			onclick="javascript:$('#dlg').dialog('close')">关闭</a>
-	</div>
-	<div id="dlg1" class="easyui-dialog" title="确认操作" 
-		style="width: 260px; height: 160px; padding: 10px"
-		data-options="
-				iconCls: 'icon-delete',
-				toolbar: '#dlg-toolbar1',
-				buttons: '#dlg-buttons1',
-				resizable:false,
-				modal:true,
-				closed:true
-			">
-		您确认要删除这条用户信息吗？</div>
-	<div id="dlg-toolbar1" style="padding: 2px 0"></div>
-	<div id="dlg-buttons1">
-		<a
-			href="javascript:void(0)" class="easyui-linkbutton"
-			onclick="javascript:confirmDelete()">确认</a>
-		 <a
-			href="javascript:void(0)" class="easyui-linkbutton"
-			onclick="javascript:$('#dlg1').dialog('close')">关闭</a>
-	</div>
 	
-
-
-
+	<div id="win"></div>
+	
+	<div id="mm" class="easyui-menu" style="width:120px;">
+	    <div data-options="iconCls:'icon-edit'">编辑</div>
+	    <div class="menu-sep"></div>
+	    <div data-options="iconCls:'icon-remove'">删除</div>
+	    <div class="menu-sep"></div>
+	    <div data-options="iconCls:'icon-reload'">刷新</div>
+	</div>
 	<script>
-		function confirmDelete(){
-			var yourSelect=$("#data").datagrid("getSelected");
-			var willdeleteUserid=yourSelect.userid;
-			
-			$.ajax({
-				type:"post",
-				url:"user1/UserAction!deleteUserById.action",
-				data:{"user.userid":willdeleteUserid},
-				success:function(data){
-					alert(data.result);
-				}
-			})
-		}
 		
 		$(document).ready(function() {
-			//这个相当于给数据网格组件添加但行选中事件
-// 			$('#data').datagrid({
-// 				onSelect: function(rowIndex,rowData){
-// 					alert(rowIndex)
-// 					alert(rowData.nickname)
-// 				}
-// 			});
 			
+			
+			$("#add  th").css({"background":"#eeeeee"});
+			//数据网格添加右键事件
+			$("#data").datagrid({
+				onRowContextMenu:function(e, rowIndex, rowData){
+					   if(3 == e.which){ 
+						   $('#mm').menu('show', {
+							    left: window.event.clientX,
+							    top:  window.event.clientY
+							});
+						   $("#data").datagrid("selectRow",rowIndex)
+						   e.preventDefault();//组织浏览器本身的右键事件
+			          }
+				}
+			});
+			//给右键菜单添加点击事件
+			$('#mm').menu({
+			    onClick:function(item){
+			    	if(item.text=='删除'){
+			    		deleteUser();
+			    	}else if(item.text=='刷新'){
+			    		$("#data").datagrid("reload");
+			    	}else if(item.text=='编辑'){
+			    		$("#data").datagrid("reload");
+			    	}
+			    }
+			});
+			//数据网格添加工具条点击事件,以及一些基本参数设置
 			$('#data').datagrid({
 				toolbar: [{
 					iconCls: 'icon-add',
-					handler: function(){alert('edit')}
+					handler: function(){
+						$('#win').window({
+							href:'useradd.jsp',
+						    width:800,
+						    zIndex:2,
+						    height:400,
+						    modal:true,
+						    title:"添加用户",
+						    closed:false,
+						    iconCls:'icon-man'
+						});
+					}
 				},'-',{
 					iconCls: 'icon-edit',
 					handler: function(){alert('edit')}
@@ -104,20 +95,11 @@
 				},'-',{
 					iconCls: 'icon-remove',
 					handler: function(){
-						//这个匿名函数就是当用户点击datagrid上面当删除按钮时应该执行当业务代码
-						//1.通过datagrid的方法获取用户当前选择的行信息
-						var yourSelect=$("#data").datagrid("getSelected");
-						//2.判断选择的行是否为null，
-						if(yourSelect==null){
-							$('#dlg').dialog('open');
-						}else{
-							$('#dlg1').dialog('open');
-						}
-						
-						
+						deleteUser();
 					}
 				}],
 				striped:true,
+				multiSort:true,
 				fitColumns:true,
 				idField:"userid",
 				loadMsg:"正在加载信息，请稍后！",
@@ -127,22 +109,81 @@
 				
 			});
 		})
-		$(document).ready(function() {
-			$("#data").datagrid({
-				onLoadSuccess : function(data) {
-					console.log(data);
-					for(var n in data.rows){
-						console.log(data.rows[n].sex)
-						if(data.rows[n].sex==1){
-							
-							data.rows[n].sex='男';
-						}else{
-							data.rows[n].sex='女';
+		function deleteUser(){
+			//这个匿名函数就是当用户点击datagrid上面当删除按钮时应该执行当业务代码
+			//1.通过datagrid的方法获取用户当前选择的行信息
+			var yourSelect=$("#data").datagrid("getSelected");
+			//2.判断选择的行是否为null，
+			if(yourSelect==null){
+				$.messager.show({
+					width:260,
+					height:150,
+					title:'提示消息',
+					msg:'必须要选择一条信息才能删除!',
+					timeout:3000,
+					showType:'slide'
+				});
+			}else{
+				$.messager.confirm({
+					title:'确认消息',
+					msg:'确认要删除这个用户信息吗?',
+					ok:"确认",
+					cancel:"取消",
+					fn:function(r){
+						if (r){
+							$.ajax({
+								type:"post",
+								url:"user1/UserAction!deleteUserById.action",
+								data:{"user.userid":yourSelect.userid},
+								success:function(data){
+									$("#data").datagrid("reload");
+									if(data.result==true){
+										$.messager.show({
+											width:260,
+											height:150,
+											title:'提示消息',
+											msg:'删除成功!(3秒自动消失)',
+											timeout:3000,
+											showType:'slide'
+										});
+									}else{
+										$.messager.show({
+											width:260,
+											height:150,
+											title:'提示消息',
+											msg:'删除失败!(3秒自动消失)',
+											timeout:3000,
+											showType:'slide'
+										});
+									}
+								}
+							})
 						}
 					}
-				}
-			})
-		})
+				});
+			}
+			
+		}
+// 		$(document).ready(function() {
+// 			$("#data").datagrid({
+// 				onLoadSuccess : function(data) {
+// 					console.log(data);
+// 					for(var n in data.rows){
+// 						console.log(data.rows[n].sex)
+// 						if(data.rows[n].sex==1){
+// 							data.rows[n].sex='男';
+// 						}else{
+// 							data.rows[n].sex='女';
+// 						}
+// 					}
+// 					$('#data').datagrid({
+// 						data:data.rows
+// 					});
+// 					console.log($("#data").datagrid("getData"));
+// 					return;
+// 				}
+// 			})
+// 		})
 	</script>
 </body>
 </html>
