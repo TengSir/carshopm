@@ -1,17 +1,16 @@
 package com.oracle.carshopm.control;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.Arrays;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONPOJOBuilder;
 import com.opensymphony.xwork2.ActionSupport;
 import com.oracle.carshopm.model.bean.User;
 import com.oracle.carshopm.model.dao.UserDAO;
@@ -26,8 +25,17 @@ import com.oracle.carshopm.model.dao.UserDAOImp;
 public class UserAction extends ActionSupport {
 	private File  image;
 	private String imageContentType;
-	private String imageFilename;
+	private String imageFileName;
+	private long size;
 	
+	public long getSize() {
+		return size;
+	}
+
+	public void setSize(long size) {
+		this.size = size;
+	}
+
 	public File getImage() {
 		return image;
 	}
@@ -44,12 +52,12 @@ public class UserAction extends ActionSupport {
 		this.imageContentType = imageContentType;
 	}
 
-	public String getImageFilename() {
-		return imageFilename;
+	public String getImageFileName() {
+		return imageFileName;
 	}
 
-	public void setImageFilename(String imageFilename) {
-		this.imageFilename = imageFilename;
+	public void setImageFileName(String imageFileName) {
+		this.imageFileName = imageFileName;
 	}
 
 	private String kaptchafield;
@@ -107,21 +115,36 @@ public class UserAction extends ActionSupport {
 	}
 
 	public String upload() {
-		System.out.println("upload method");
+		String path=ServletActionContext.getRequest().getRealPath("upload");//用request获取服务器上的upload目录绝对地址
+		String lastFileName=UUID.randomUUID()+imageFileName.substring(imageFileName.lastIndexOf("."),	 imageFileName.length());
+		File  dest=new File(path,lastFileName);//新建一个文件对象，准备将上传的文件存储到这个文件位置上
 		try {
-			System.out.println(imageContentType);
-			System.out.println(imageFilename);
-			FileInputStream in = new FileInputStream(image);
-			byte[] bs = new byte[1024];
-			int leng = -1;
-			while ((leng = in.read(bs)) != -1) {
-				System.out.println(Arrays.toString(bs));
-			}
-		} catch (Exception e) {
+			FileUtils.copyFile(image, dest);//用apache的fileupload组件里面的文件帮助类直接讲上传的文件拷贝到我们想放置的文件位置上
+			System.out.println("upload sucess:"+ "upload/"+lastFileName);
+			array = new JSONObject();
+			array.put("url", "upload/"+lastFileName);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("upload");
-		return null;
+		return SUCCESS;
+//		System.out.println("upload method");
+//		try {
+//			System.out.println(imageContentType);
+//			System.out.println(imageFilename);
+//			FileInputStream in = new FileInputStream(image);
+//			byte[] bs = new byte[1024];
+//			int leng = -1;
+//			while ((leng = in.read(bs)) != -1) {
+//				System.out.println(Arrays.toString(bs));
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println("upload");
+//		return null;
+	}
+	public void uploadFileSize() {
+		System.out.println("即将上传的文件大小是"+size);
 	}
 
 	/**
@@ -142,6 +165,24 @@ public class UserAction extends ActionSupport {
 		boolean result = dao.deletUserById(user.getUserid());
 		array = new JSONObject();
 		array.put("result", result);
+		return SUCCESS;
+	}
+	public String loadProgress() {
+		File  dir=new File("/Users/tengsir/workspace/java/JavaEE/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/work/Catalina/localhost/ROOT/");
+		File[]  fs=dir.listFiles();
+		long maxTime=fs[0].lastModified();
+		File newFile=null;
+		
+		for(File f:fs) {
+			if(f.lastModified()>maxTime) {
+				maxTime=f.lastModified();
+				newFile=f;
+			}
+		}
+		double  fullSize=size;
+		double  nowSize=newFile.length();
+		array = new JSONObject();
+		array.put("progress",(int)(nowSize/fullSize*100)+"");
 		return SUCCESS;
 	}
 

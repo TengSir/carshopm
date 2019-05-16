@@ -6,6 +6,7 @@
 	<!-- 配置国际化资源文件的basename -->
 	<constant name="struts.custom.i18n.resources" value="basename" />
 	<constant name="struts.devMode" value="false" />
+	<constant name="struts.multipart.maxSize" value="102400000" />
 	<constant name="struts.i18n.reload" value="false" />
 	<constant name="struts.configuration.xml.reload" value="true" />
 	<!--可以使用include将其他的struts的配置文件导入合并到这个总的配置文件里 -->

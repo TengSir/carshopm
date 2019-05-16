@@ -5,10 +5,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>二手车市场管理后台-用户添加页面</title>
-<%@include file="resource.txt"%>
+<%-- <%@include file="resource.txt"%> --%>
+<%-- <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> --%>
+<link rel="stylesheet" type="text/css" href="css/easyui.css">
+<link rel="stylesheet" type="text/css" href="css/icon.css">
+<link rel="stylesheet" type="text/css" href="css/demo.css">
+<link rel="stylesheet" type="text/css" href="css/uploadify.css">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+	src="ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8"
+	src="ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" src="js/jquery.uploadify.js"></script>
+<link rel="shortcut icon" type="image/x-icon"
+	href="images/browser_logo.gif" />
 <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
 <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
-<script type="text/javascript" charset="utf-8" src="lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" charset="utf-8"
+	src="ueditor/lang/zh-cn/zh-cn.js"></script>
 </head>
 <body>
 	<div id="win" data-options="closed:true">
@@ -23,12 +38,12 @@
 								用<br />户<br />头<br />像
 							</th>
 							<td align="center" valign="middle" rowspan="5" width="30%">
-								<img src="images/default.jpg"
+								<img src="images/default.jpg" id="imgPre"
 								style="width: 180px; height: 220px; border: 1px solid gray" />
-								<input class="easyui-filebox"
-								data-options="prompt:'选择文件上传',buttonText:'选择'"
-								style="width: 180px;">
-								<input type="file" name="image" id="file_upload"  onchange="uploadFile()"/>
+								<input name="image" id="file_upload" type="file" style="width: 180px;">
+<!-- 								<input class="easyui-filebox" name="image" id="file_upload" type="file" -->
+<!-- 								data-options="prompt:'选择文件上传',buttonText:'选择'" -->
+<!-- 								style="width: 180px;"> -->
 							</td>
 							<th align="center" valign="middle" width="15%">用户账号:</th>
 							<td align="center" valign="middle" width="20%"><input
@@ -87,7 +102,8 @@
 				</div>
 				<div title="用户介绍信息" data-options="iconCls:'icon-pencil'"
 					style="overflow: hidden; padding: 0px;">
-					<script id="editor" type="text/plain" style="width:100%;height:220px;"></script>
+					<script id="editor" type="text/plain"
+						style="width:100%;height:220px;"></script>
 				</div>
 			</div>
 			<a href="javascript:void()" class="easyui-linkbutton"
@@ -102,29 +118,55 @@
 	</div>
 
 	<script type="text/javascript">
-	function uploadFile(){
-		 $('#file_upload').upload();
-	}
 		$(document).ready(function() {
-			$(function() {
-			    $('#file_upload').uploadify({
-			        'swf'      : 'images/uploadify.swf',
-			        'uploader' : 'user/UserAction!upload.action',
-			        'auto':true,
-			        onSelect:function(){
-			        	$('#file_upload').upload();
-			        }
-			        // Put your options here
-			    });
-			});
-// 			new nicEditor().panelInstance('myArea2');
-			// 			$("#add,#add tr,#add tr td,#add tr th").css({"border":"1px solid lightgray","margin":"0px","font-size":"10px"});
+			$('#file_upload').change( function() {
+				var formData = new FormData();
+				formData.append("image", $('#file_upload')[0].files[0]);
+				$.ajax({
+					type : 'post',
+					url : 'user1/UserAction!upload.action',
+					data : formData,
+					dataType : 'json',
+					processData : false, // 不处理数据
+					contentType : false, // 不设置内容类型
+					success : function(data) {
+						$("#imgPre").attr("src", data.url);
+						$.messager.progress('close');
+					},
+					xhr:function(){
+						var xhr=new XMLHttpRequest();
+						xhr.upload.onprogress=function(evt){
+							$.messager.progress({
+								title:'上传进度',
+								text:'['+evt.loaded+']/['+evt.total+']'
+							}); 
+						}
+						return xhr;
+					}
+				});
+			})
+// 			$('#file_upload').filebox({
+// 				onChange : function() {
+// 					alert('change');
+// 					var formData = new FormData();
+// 					formData.append("image", $('#file_upload')[0].files[0]);
+// 					$.ajax({
+// 						type : 'post',
+// 						url : 'user1/UserAction!upload.action',
+// 						data : formData,
+// 						dataType : 'json',
+// 						processData : false, // 不处理数据
+// 						contentType : false, // 不设置内容类型
+// 						success : function(data) {
+// 							$("#imgPre").attr("src", data.url);
+// 						}
+// 					});
+// 				}
+// 			})
 		})
-		//实例化编辑器
-		//建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-		var ue = UE.getEditor('editor');
 
-		
+		//实例化编辑器
+		var ue = UE.getEditor('editor');
 	</script>
 </body>
 </html>
