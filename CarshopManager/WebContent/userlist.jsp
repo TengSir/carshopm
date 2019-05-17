@@ -22,6 +22,7 @@
 				<th data-options="field:'username',align:'right'">用户名</th>
 				<th data-options="field:'sex',align:'right'">用户性别</th>
 				<th data-options="field:'age'">用户年龄</th>
+				<th data-options="field:'jialing'">用户驾龄</th>
 				<th data-options="field:'tel',align:'center'">用户电话</th>
 				<th data-options="field:'job',align:'center'">职业</th>
 				<th data-options="field:'email',align:'center'">用户邮箱</th>
@@ -30,7 +31,9 @@
 		</thead>
 	</table>
 	
-	<div id="win"></div>
+	<div id="win"  data-options="closed:true" style="">
+		<%@include file="useradd.jsp" %>
+	</div>
 	
 	<div id="mm" class="easyui-menu" style="width:120px;">
 	    <div data-options="iconCls:'icon-edit'">编辑</div>
@@ -76,7 +79,7 @@
 					iconCls: 'icon-add',
 					handler: function(){
 						$('#win').window({
-							href:'useradd.jsp',
+// 							href:'useradd.jsp',
 						    width:800,
 						    zIndex:2,
 						    height:400,
@@ -88,10 +91,12 @@
 					}
 				},'-',{
 					iconCls: 'icon-edit',
-					handler: function(){alert('edit')}
+					handler: function(){
+						editUser();
+					}
 				},'-',{
 					iconCls: 'icon-save',
-					handler: function(){alert('edit')}
+					handler: function(){alert('save')}
 				},'-',{
 					iconCls: 'icon-remove',
 					handler: function(){
@@ -109,6 +114,48 @@
 				
 			});
 		})
+		function editUser(){
+			var yourSelect=$("#data").datagrid("getSelected");
+			//2.判断选择的行是否为null，
+			if(yourSelect==null){
+				$.messager.show({
+					width:260,
+					height:150,
+					title:'提示消息',
+					msg:'必须要选择一条信息才能编辑!',
+					timeout:3000,
+					showType:'slide'
+				});
+			}else{
+				$.ajax({
+					type:"post",
+					url:"user1/UserAction!getUserByUserId.action",
+					data:"user.userid="+yourSelect.userid,
+					success:function(data){
+						$("#username").textbox({value:data.username});
+						$("#password").textbox({value:data.password});
+						$("#nickname").textbox({value:data.nickname});
+						$("#job").tagbox({value:data.job});
+						$("#email").textbox({value:data.email});
+						$("#tel").textbox({value:data.tel});
+						$("#age").spinner({value:data.age});
+						$("#jialing").slider({value:data.jialing});
+						$("#image").textbox({value:data.image});
+						$("#imgPre").attr("src",data.image);
+						ue.setContent(data.jianjie);
+						$('#win').window({
+						    width:800,
+						    zIndex:2,
+						    height:400,
+						    modal:true,
+						    title:"编辑用户",
+						    closed:false,
+						    iconCls:'icon-pencil'
+						});
+					}
+				});
+			}
+		}
 		function deleteUser(){
 			//这个匿名函数就是当用户点击datagrid上面当删除按钮时应该执行当业务代码
 			//1.通过datagrid的方法获取用户当前选择的行信息

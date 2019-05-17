@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+ <session-factory>
+ <!-- 1配置hibernate操作哪个数据库 -->
+    <!-- Database connection settings -->
+    <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="connection.url">jdbc:mysql://localhost:3306/carshop?useUnicode=true&amp;characterEncoding=UTF-8</property>
+    <property name="connection.username">root</property>
+    <property name="connection.password"></property>
+
+    <!-- JDBC connection pool (use the built-in) -->
+    <property name="connection.pool_size">20</property>
+
+    <!-- SQL dialect 方言 -->
+    <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+
+    <!-- Enable Hibernate's automatic session context management -->
+    <property name="current_session_context_class">thread</property>
+
+    <!-- Disable the second-level cache  -->
+<!--     <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property> -->
+
+    <!-- Echo all executed SQL to stdout -->
+    <property name="show_sql">true</property>
+    <property name="format_sql">true</property>
+
+    <!-- Drop and re-create the database schema on startup -->
+    <!-- 是否由hibernate托管数据库 -->
+    <property name="hbm2ddl.auto">none</property>
+    
+    <!-- 配置操作这个数据到时候操作的java类和哪些对应 -->
+    <!--  配置映射文件 -->
+    <mapping resource="com/oracle/carshopm/model/bean/User.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

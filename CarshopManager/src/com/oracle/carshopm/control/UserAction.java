@@ -2,9 +2,7 @@ package com.oracle.carshopm.control;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Random;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -144,7 +142,7 @@ public class UserAction extends ActionSupport {
 //		return null;
 	}
 	public void uploadFileSize() {
-		System.out.println("即将上传的文件大小是"+size);
+//		System.out.println("即将上传的文件大小是"+size);
 	}
 
 	/**
@@ -160,6 +158,16 @@ public class UserAction extends ActionSupport {
 		array = new JSONObject(datas);
 		return SUCCESS;
 	}
+	/**
+	 * 添加用户信息的ajax方法
+	 * @return
+	 */
+	public String addUser() {
+		boolean result=dao.add(user);
+		array = new JSONObject();
+		array.put("result", result);
+		return SUCCESS;
+	}
 
 	public String deleteUserById() {
 		boolean result = dao.deletUserById(user.getUserid());
@@ -167,6 +175,16 @@ public class UserAction extends ActionSupport {
 		array.put("result", result);
 		return SUCCESS;
 	}
+	/**
+	 * 根据用户id返回json格式的用户对象的ajax反方
+	 * @return
+	 */
+	public String getUserByUserId() {
+		User user= dao.getUserInfoByUserId(this.user.getUserid());
+		array =JSONObject.parseObject(JSONObject.toJSONString(user));
+		return SUCCESS;
+	}
+	
 	public String loadProgress() {
 		File  dir=new File("/Users/tengsir/workspace/java/JavaEE/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/work/Catalina/localhost/ROOT/");
 		File[]  fs=dir.listFiles();

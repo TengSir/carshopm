@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping
+	package="com.oracle.carshopm.model.bean" auto-import="true">
+	<class name="User">
+		<id name="userid">
+			<generator class="increment"></generator>
+		</id>
+		<property name="username"></property>
+		<property name="nickname"></property>
+		<property name="password"></property>
+		<property name="sex"></property>
+		<property name="age"></property>
+		<property name="job"></property>
+		<property name="tel"></property>
+		<property name="email"></property>
+		<property name="jialing"></property>
+		<property name="jianjie"></property>
+		<property name="image"></property>
+	</class>
+</hibernate-mapping>
