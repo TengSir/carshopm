@@ -10,6 +10,5 @@ public interface UserDAO extends BaseDAO {
 	public boolean checkUserExsit(String username);
 	public boolean deletUserById(int userid);
 	public int getAllCount();
-	
 	public ArrayList<User>  listUsers(int page,int count);
 }

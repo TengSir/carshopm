@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import com.oracle.carshopm.model.bean.User;
 
@@ -43,7 +44,10 @@ public class UserDAOImp extends BaseDAOImp implements UserDAO {
 
 	@Override
 	public boolean checkUserExsit(String username) {
-		return false;
+		Criteria c=getSession().createCriteria(User.class);
+		c.add(Restrictions.eq("username",username));
+		
+		return c.uniqueResult()==null?false:true;
 	}
 
 	@Override
@@ -75,7 +79,8 @@ public class UserDAOImp extends BaseDAOImp implements UserDAO {
 
 	@Override
 	public User login(String username, String password) {
-		return null;
+		Query q=getSession().createQuery("from User where username='"+username+"' and password='"+password+"'");
+		return (User)q.uniqueResult();
 	}
 
 	@Override
