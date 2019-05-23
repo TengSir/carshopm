@@ -31,7 +31,7 @@
 		</thead>
 	</table>
 	
-	<div id="win"  data-options="closed:true" style="">
+	<div id="win"  data-options="closed:true" style="display: none">
 		<%@include file="useradd.jsp" %>
 	</div>
 	
@@ -45,8 +45,6 @@
 	<script>
 		
 		$(document).ready(function() {
-			
-			
 			$("#add  th").css({"background":"#eeeeee"});
 			//数据网格添加右键事件
 			$("#data").datagrid({
@@ -69,7 +67,7 @@
 			    	}else if(item.text=='刷新'){
 			    		$("#data").datagrid("reload");
 			    	}else if(item.text=='编辑'){
-			    		$("#data").datagrid("reload");
+			    		editUser();
 			    	}
 			    }
 			});
@@ -78,6 +76,17 @@
 				toolbar: [{
 					iconCls: 'icon-add',
 					handler: function(){
+						$("#username").textbox({value:""});
+						$("#password").textbox({value:""});
+						$("#nickname").textbox({value:""});
+						$("#job").tagbox({value:""});
+						$("#email").textbox({value:""});
+						$("#tel").textbox({value:""});
+						$("#age").spinner({value:20});
+						$("#jialing").slider({value:0});
+						$("#image").textbox({value:""});
+						$("#imgPre").attr("src","images/default.jpg");
+						ue.setContent("");
 						$('#win').window({
 // 							href:'useradd.jsp',
 						    width:800,
@@ -209,28 +218,7 @@
 					}
 				});
 			}
-			
 		}
-// 		$(document).ready(function() {
-// 			$("#data").datagrid({
-// 				onLoadSuccess : function(data) {
-// 					console.log(data);
-// 					for(var n in data.rows){
-// 						console.log(data.rows[n].sex)
-// 						if(data.rows[n].sex==1){
-// 							data.rows[n].sex='男';
-// 						}else{
-// 							data.rows[n].sex='女';
-// 						}
-// 					}
-// 					$('#data').datagrid({
-// 						data:data.rows
-// 					});
-// 					console.log($("#data").datagrid("getData"));
-// 					return;
-// 				}
-// 			})
-// 		})
 	</script>
 </body>
 </html>

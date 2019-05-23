@@ -32,12 +32,12 @@
 							style="color: red;"><s:fielderror fieldName="passwordError"></s:fielderror></b>
 					</div>
 					<div style="margin-bottom: 20px">
-						<input name="kaptchafield" class="easyui-textbox" prompt="验证码"
+						<input id="kaptchafield" name="kaptchafield" class="easyui-textbox" prompt="验证码"
 							iconWidth="28" style="width: 50%; height: 30px; padding: 10px;">
 							<img id="code" src="Kaptcha.jpg" style="width: 50%; height: 30px;float:left;"/>
 					</div>
 					<div style="text-align: center;">
-						<a href="javascript:window.document.forms[0].submit()"
+						<a href="javascript:login()"
 							class="easyui-linkbutton">&nbsp;&nbsp;登陆&nbsp;&nbsp;</a>
 					</div>
 				</form>
@@ -45,6 +45,54 @@
 		</div>
 	</div>
 	<script>
+		function login(){
+			$.ajax({
+				type:"post",
+				url:"user1/UserAction!checkCode.action",
+				data:"verifyCode="+$("#kaptchafield").val(),
+				success:function(data){
+					if(!data.result){
+						$.messager.show({
+							width:260,
+							height:150,
+							title:'提示消息',
+							msg:'<b style="color:red">验证码输入错误!</b>',
+							timeout:3000,
+							showType:'slide'
+						});
+						$("#kaptchafield").textbox("setText","");
+						$("#kaptchafield").focus();
+					}else{
+						$.ajax({
+							type:"post",
+							url:"user1/UserAction!login.action",
+							data:{
+								"user.username":$("[name='user.username']").val(),
+								"user.password":$("[name='user.password']").val(),
+							},
+							success:function(data){
+								if(data.result=='fail'){
+									$("#code").attr("src","Kaptcha.jpg?time="+Math.random())
+									$.messager.show({
+										width:260,
+										height:150,
+										title:'提示消息',
+										msg:'<b style="color:red">登陆失败，请检查用户名和密码!</b>',
+										timeout:3000,
+										showType:'slide'
+									});
+									$("[name='user.username']").textbox("setText","");
+									$("[name='user.password']").textbox("setText","");
+									
+								}else{
+									location.href='index.jsp';
+								}
+							}
+						});
+					}
+				}
+			});
+		}
 		function changeLocation() {
 			var x = ($(window).width() - 400) / 2;
 			var y = ($(window).height() - 400) / 2;

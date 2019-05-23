@@ -10,3 +10,4 @@
 <script type="text/javascript" src="js/jquery.uploadify.js"></script>
 <link rel="shortcut icon"type="image/x-icon"  href="images/browser_logo.gif" />
 <script type="text/javascript" charset="utf-8" src="ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="echart/echarts.min.js"></script>
